@@ -1,0 +1,34 @@
+#coding:utf-8
+#ExchangeKeysMethod: None# [None, str.lower, str.upper, str.title, , lambda str: str[0].lower()+str[1:], ...]
+#DefaultType: dict # 型や条件が書いていないものはここに記した型になる [dict[key]=value, set(), frozenset(), OderDict, ..., setattr(object, key, value)]
+
+Path
+    Db  pathlib.PurePath
+Git
+    Remote  in {'HTTPS', 'SSH'}
+Github
+    User    str
+    Contributions
+        IsGet   boolean
+        IsMake  boolean
+        IsUpload    boolean
+
+# $ はエイリアス（別名定義）
+$
+    ROOT    pathlib.Path
+    TEST
+        PATH    pathlib.Path
+        NAME    str
+some
+    value1  boolean
+    value2  boolean
+    value3  int
+    contents1   dict
+    contents1   str
+
+list*   list    # ワイルドカード、正規表現が使える
+
+.key    str     # 階層の定義はどうするか
+
+
+

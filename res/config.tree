@@ -1,0 +1,97 @@
+#tree   1.0.0
+#coding utf-8
+#ExchangeKeysMethod None# [None, str.lower, str.upper, str.title, , lambda str: str[0].lower()+str[1:], ...]
+#RootName   (未記入ならファイル名から取得する)。 lambda str: str[1].upper()+str[1:]
+#RootType   object # [dict[key]=value, set(), frozenset(), OderDict, ..., setattr(object, key, value)]
+#KeyType    dict # [dict[key]=value, set(), frozenset(), OderDict, ..., setattr(object, key, value)]
+#ValueType  None # [None, str] strはすべて文字列とみなす。Noneはメタ文字を解釈。参照などする。
+
+# `.tree`なら木構造ベース、`.list`なら改行区切で配列にする。`.object`, `.dict`, `.set`のように直接型指定もできる。
+
+#
+# 設定ファイル（のつもり）
+#
+Path
+    # プロジェクトrootディレクトリから見た相対パス
+    Db  ./res/db/
+Git
+    # HTTPS or SSH。未定義や不正値ならHTTPS。
+    # $ git remote add origin {SSH/HTTPS}
+    #     SSH  : git@{ssh_host}:{user}/{repo}.git
+    #     HTTPS: https://{user}:{pass}@github.com/{user}/{repo}.git
+    Remote  HTTPS
+Github
+    User    ytyaru
+    # auto, 1, true, on、の値で草データを自動収集する
+    # is_make, is_uploadは未実装
+    Contributions
+        IsGet   auto
+        IsMake  auto
+        IsUpload    auto
+
+# 階層を1行表記することも可
+Root.Key1   value1
+Root.Key2   value2
+
+# 1行と複数行を組み合わせることも可
+Root.Sub1.Sub11.Sub111
+    Key1    value1
+    Sub1111
+        Key1    value1
+    Sub1112.Sub11121
+        Key1    value1
+    Sub1112.Sub11122
+        Key1    value1
+
+# @ はファイル内設定
+@
+    Version 1.0.0
+    Coding  utf-8
+    ExchangeKeysMethod  None    # [None, str.lower, str.upper, str.title, , lambda str: str[0].lower()+str[1:], ...]
+    RootName    #(未記入ならファイル名から取得する)。 lambda str: str[1].upper()+str[1:]
+    RootType   object # [dict[key]=value, set(), frozenset(), OderDict, ..., setattr(object, key, value)]
+    KeyType    dict # [dict[key]=value, set(), frozenset(), OderDict, ..., setattr(object, key, value)]
+    ValueType  None # [None, str] strはすべて文字列とみなす。Noneはメタ文字を解釈。参照などする。
+    Schema      ./config.tree.schema
+
+# $ はエイリアス（別名定義）
+$
+    ROOT    /tmp
+    TEST
+        PATH    ${ROOT}/b.tree
+        NAME    b
+some
+    value1  @GitHub.Contributions.IsGet  # @{どこかにあるキー名}で参照できる
+    value1  @IsGet  # 重複してないなら省略できる
+    value1  @MyList[3]  # [10,20,30,40,50]だとすると`40`
+    value1  @MyList['A']  # ['A':10,'B':20]だとすると`10`
+    value1  @MyList[$key]  # ['A':10,'B':20], $key=B だとすると`20`
+    value2  @[/tmp/a.tree]GitHub.Contributions.IsGet  # 「@[ファイルパス]どこかにあるキー名」で参照できる
+    value3  @[$TEST.PATH]Some.Value
+    contents1   @[$TEST.PATH]       # ファイルを指定したとき、そのdict(set,object,...)がセットされる
+    contents1   @[$TEST.PATH]Key    # キーを指定したとき、そのdict(set,object,...)がセットされる
+    contents1   @[$TEST.PATH]${alias}   # 外部treeファイルのエイリアス参照
+
+# 値にメタ文字が含まれるときは""で囲む。(space, tab, newline, `.`, `@`)
+Text1 "space in value."
+Text2 """space in value.
+second line."""
+Text3   @""             # 子要素をテキストとみなす。`1行目のテキスト\n2行目のテキスト`。HTMLでいう<pre>タグと同じ。
+    1行目のテキスト
+    2行目のテキスト
+Text4 "space in value.\nsecond line. \\100yen" # 改行コードを`\n`で表記
+Text5 @"space in value.\nsecond line. \100yen" # 改行コードを`\n`という文字として解釈
+Text6   @[/tmp/some.txt]    # .tree以外のファイル参照したときはテキスト値とする。複数行データ入力時に使う。
+Class   @[/tmp/class.py]    # `*.py`。そのモジュール内にある定義のうち最初に取得されたものをクラスと仮定して生成する
+Instance    @[/tmp/class.py](arg1, arg2)    # クラスインスタンスを生成する
+Json    @[https://webapi/get_json/?v=${alias}]    # HTTPSリクエスト値を取得する。jsonならjson.load()でdict化する
+Data    @"data:text/plain;charset=utf-8;base64,VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wZWQgb3ZlciB0aGUgbGF6eSBkb2cu"
+
+Array1  [1, 3, 5]
+Array2  ['ABC','DEF','GHI']
+Dict    {'k1':'v1', 'k2':'v2'}
+tuple   (1,2)
+tuple   (1,2)
+
+# YAML
+# http://magazine.rubyist.net/?0009-YAML
