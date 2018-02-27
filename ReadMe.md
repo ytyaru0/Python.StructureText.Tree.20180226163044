@@ -7,17 +7,26 @@
         * [pyenv](http://ytyaru.hatenablog.com/entry/2019/01/06/000000)
             * Python 3.6.4
 
+# 目的
+
+目的ごとに適した保存方法が異なるはず。
+
+目的|説明|既存形式
+----|----|--------
+蓄積|保存に特化。圧縮がキモ。(Structure-Model)|RDBMS, 構造化テキスト(ini,csv,xml,json,yaml,rdf...)
+表示|加工せずそのままの状態を用いることで高速に表示。(View)
+検索|動的にViewを変える。(Control)|XPath, YPath, SELECT, SPARQL
+
 # 形式
 
 構造化テキストの形式。
 
 形式|説明|既存|用途
 ----|----|----|----
-list|1要素1改行で表す| |データ配列、順序
+list|1要素1改行で表す| |順序や集合
 tree|1階層をインデントか`.`で表す|xml, json, yaml|包含関係
-table|ヘッダ行以降すべてデータ行|dsv(csv, tsv)|定型属性をもったデータの網羅
-
-なお、ネットワーク構造は`@Root.Node.Leaf`, `@[*.txt]`などの参照で行う。
+table|ヘッダ行以降すべてデータ行|dsv(csv, tsv)|定型属性をもったデータの網羅|属性と値のlist
+network|関係を定義する|[RDF(N-Triples)](https://www.kanzaki.com/docs/sw/n3.html) |推論
 
 # メタ文字
 
@@ -41,4 +50,3 @@ table|ヘッダ行以降すべてデータ行|dsv(csv, tsv)|定型属性をも�
 このソフトウェアはCC0ライセンスである。
 
 [![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png "CC0")](http://creativecommons.org/publicdomain/zero/1.0/deed.ja)
-
