@@ -93,5 +93,53 @@ Dict    {'k1':'v1', 'k2':'v2'}
 tuple   (1,2)
 tuple   (1,2)
 
+
+elements:
+    - id: 0  # YAMLは要素単位で`-`を付けるのが面倒
+      name: A
+    - id: 1
+      name: B
+
+element_names
+    id
+    name
+element_types
+    int
+    str
+element_conds
+    range=0..
+    length=4..8, pattern=/^[A-Z_]/
+elements    table[names=elements_names, types=elements_types, condition=elements_conds]
+    0   A
+    1   B
+    2,C
+    3|D
+
+element_0   records[element_type]
+    0
+    A
+element_1   records[element_type]
+    1
+    B
+
+elements    table
+    @names
+        id
+        name
+    @types
+        int
+        str
+    @conds
+        range=0..
+        length=4..8, pattern=/^[A-Z_]/
+
+elements    table[name,type,cond]
+    Id      int PK, range=0..
+    Name    str UK, default=NAME, null=False, length=4..8, pattern=/^[A-Z_]/
+    JobId   int FK
+        
+        
+
+
 # YAML
 # http://magazine.rubyist.net/?0009-YAML
